@@ -30,3 +30,4 @@ data/fashion_products/
 data/detection_images/
 
 runs/
+data/day9/train.csv
