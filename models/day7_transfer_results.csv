@@ -1,0 +1,2 @@
+Model,Pretrained Weights,Image Size,Classes,Validation Loss,Validation Accuracy
+MobileNetV2 Transfer Learning,ImageNet,160x160,4,0.1043,0.9438
