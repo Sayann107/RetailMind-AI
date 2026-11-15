@@ -375,3 +375,174 @@ python src/detect_products.py
 Run YOLO on a local image:
 
 python src/detect_products.py "path/to/image.jpg"
+Day 8: Grad-CAM Explainability
+Objective
+Make the RetailMind AI product classifier explainable by identifying the image regions that contribute to each classification.
+
+Approach
+Day 8 reuses the Day 7 MobileNetV2 transfer-learning classifier.
+
+No new classification model is trained.
+
+Grad-CAM computes gradients for the predicted class and combines them with the model's convolutional feature maps to create a visual heatmap.
+
+Pipeline
+Product Image → Day 7 MobileNetV2 Classifier → Category Prediction → Grad-CAM → Heatmap → Overlay on Original Image → Explainable Product Prediction
+
+Output
+For each selected product image, the system produces:
+
+Predicted category
+Prediction confidence
+Grad-CAM heatmap
+Heatmap overlay on the original product image
+Example Grad-CAM outputs are stored in:
+
+outputs/day8_gradcam/
+
+Running Day 8
+python src/explain_product.py "path/to/product.jpg"
+
+Conclusion
+Day 8 completes Phase 2 by adding visual explainability to the RetailMind product-classification module.
+
+Grad-CAM highlights image regions that contribute strongly to the model prediction, helping inspect and understand model behaviour.
+Day 9: LSTM Demand Forecasting
+Objective
+Forecast future store and product demand using an LSTM neural network.
+
+Accurate demand predictions can support inventory planning and help reduce stockouts and overstock.
+
+Dataset
+The Store Item Demand Forecasting dataset is used.
+
+The dataset contains:
+
+Date
+Store ID
+Item ID
+Daily sales
+The current prototype forecasts demand for Store 1 and Item 1.
+
+Preprocessing
+The Day 9 pipeline:
+
+Loads the sales data with Pandas.
+Selects one store and item.
+Sorts and resamples sales into a daily time series.
+Scales sales using training-data minimum and maximum.
+Creates 30-day look-back sequences.
+Reserves the most recent 30 days for testing.
+LSTM Architecture
+Input sequence of 30 daily sales values
+LSTM layer with 32 units
+Dropout
+LSTM layer with 16 units
+Dropout
+Dense layer
+Single regression output
+Evaluation
+The model is evaluated using:
+
+MAE: Mean Absolute Error
+RMSE: Root Mean Squared Error
+Actual versus predicted demand graph
+Lower MAE and RMSE values indicate better forecasting performance.
+
+Results
+MAE: ADD_DAY9_MAE
+
+RMSE: ADD_DAY9_RMSE
+
+Replace the placeholders using:
+
+models/day9_results.csv
+
+Forecast
+The saved LSTM produces a recursive seven-day demand forecast.
+
+The forecast is stored in:
+
+models/day9_forecast.csv
+
+Generated Files
+models/day9_lstm.keras
+models/day9_scaling.csv
+models/day9_results.csv
+models/day9_test_predictions.csv
+models/day9_last_window.csv
+models/day9_forecast.csv
+outputs/day9_actual_vs_predicted.svg
+Running Day 9
+Train and evaluate the LSTM:
+
+python src/train_lstm_demand.py
+
+Generate the next seven-day forecast:
+
+python src/forecast_demand.py
+Day 10: Multi-Horizon Forecasting with Attention
+Objective
+Upgrade the RetailMind demand forecasting module from single-step LSTM forecasting to multi-horizon forecasting with attention.
+
+Dataset
+Day 10 reuses the Store Item Demand data from Day 9.
+
+The current prototype forecasts Store 1 and Item 1.
+
+Sequence Setup
+The model uses:
+
+30 historical days as input
+7 future days as output
+Unlike Day 9, the model predicts all seven future horizons together.
+
+Architecture
+The Day 10 model contains:
+
+LSTM sequence encoder
+Temporal attention
+Dense forecast decoder
+Seven-step regression output
+Attention
+The attention mechanism assigns weights to the historical sequence.
+
+Higher attention weights indicate historical positions that contribute more strongly to the model's representation used for the forecast.
+
+The visualization is stored in:
+
+outputs/day10_attention.svg
+
+Evaluation
+The model reports MAE and RMSE separately for:
+
+Day +1
+Day +2
+Day +3
+Day +4
+Day +5
+Day +6
+Day +7
+An overall MAE and RMSE are also calculated.
+
+Results are stored in:
+
+models/day10_results.csv
+
+Forecast
+The final multi-horizon demand forecast is stored in:
+
+models/day10_forecast.csv
+
+Running Day 10
+Train the model:
+
+python src/train_day10_seq2seq.py
+
+Generate the multi-horizon forecast:
+
+python src/forecast_day10.py
+
+Generate the attention visualization:
+
+python src/visualize_day10_attention.py
