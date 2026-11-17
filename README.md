@@ -546,3 +546,60 @@ python src/forecast_day10.py
 Generate the attention visualization:
 
 python src/visualize_day10_attention.py
+Day 11: Synthetic Product Image Augmentation
+Objective
+Improve representation of under-represented fashion-product categories using synthetic image generation.
+
+Dataset
+Day 11 reuses the Fashion Product Images dataset used by the RetailMind computer-vision module.
+
+Product metadata is used to identify a comparatively under-represented category.
+
+Approach
+A Variational Autoencoder (VAE) is trained using real images from the selected category.
+
+The VAE contains:
+
+Convolutional encoder
+Latent representation
+Variational sampling
+Convolutional decoder
+The decoder generates new synthetic product images from latent vectors.
+
+Quality Review
+Synthetic images are manually inspected before they are used as augmentation data.
+
+Poor or unrealistic outputs are removed rather than automatically including every generated image.
+
+Augmentation
+Approved synthetic images are added to the selected category's real training images.
+
+The classifier can then be retrained using the augmented dataset to compare performance before and after synthetic augmentation.
+
+Generated Files
+models/day11_category.txt
+models/day11_vae_encoder.keras
+models/day11_vae_decoder.keras
+models/day11_results.csv
+outputs/day11_synthetic/
+Running Day 11
+Prepare the under-represented category:
+
+python src/prepare_day11_category.py
+
+Train the VAE:
+
+python src/train_day11_vae.py
+
+Generate synthetic product images:
+
+python src/generate_day11_images.py
+
+After manually reviewing generated images:
+
+python src/evaluate_day11_augmentation.py
+
+Conclusion
+Day 11 extends RetailMind AI with generative modelling.
+
+Synthetic augmentation is intended to improve representation of under-represented product categories. Generated samples are reviewed before being incorporated into classifier training because synthetic data quality directly affects downstream classification performance.
