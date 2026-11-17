@@ -31,3 +31,5 @@ data/detection_images/
 
 runs/
 data/day9/train.csv
+data/day11_rare_category/
+data/day11_augmented_category/
